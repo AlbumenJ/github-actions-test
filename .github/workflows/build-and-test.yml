@@ -1,0 +1,15 @@
+name: Build and Test
+
+on:
+  workflow_run:
+    workflows: ["PR Comment"]
+    types:
+      - completed
+  push: null
+  pull_request: null
+
+jobs:
+  build-source:
+    runs-on: ubuntu-18.04
+    steps:
+      - run: echo "Test"
