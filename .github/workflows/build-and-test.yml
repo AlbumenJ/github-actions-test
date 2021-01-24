@@ -1,15 +1,19 @@
 name: Build and Test
 
 on:
-  workflow_run:
-    workflows: ["PR Comment"]
-    types:
-      - completed
+  issue_comment: null
   push: null
   pull_request: null
 
 jobs:
+  check-comment:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'issue_comment' || !(github.event_name == 'issue_comment' && github.event.issue.pull_request && startsWith( github.event.comment.body, 'Retrigger test workflow' )) }}
+    steps:
+      - run: echo "True"
+
   build-source:
     runs-on: ubuntu-18.04
+    needs: [check-comment]
     steps:
       - run: echo "Test"
