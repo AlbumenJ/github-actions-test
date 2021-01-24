@@ -5,12 +5,14 @@ on:
   push: null
   pull_request: null
 
+env:
+  COMMENT_TRIGGER_PREFIX: 'Re-Trigger test workflow'
+
 jobs:
   check-comment:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'issue_comment' || !(github.event_name == 'issue_comment' && github.event.issue.pull_request && startsWith( github.event.comment.body, 'Retrigger test workflow' )) }}
-    steps:
-      - run: echo "True"
+    if: ${{ github.event_name != 'issue_comment' ||
+              (github.event_name == 'issue_comment' && github.event.issue.pull_request && startsWith( github.event.comment.body, env.COMMENT_TRIGGER_PREFIX )) }}
 
   build-source:
     runs-on: ubuntu-18.04
